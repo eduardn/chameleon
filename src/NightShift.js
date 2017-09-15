@@ -15,6 +15,9 @@ const checkCurrentTimeAgainstSun = () => {
 
     var currentHours = new Date().getHours();
 
+    console.log('Day hour starts at:', day);
+    console.log('Night hour starts at:', night);
+
     if (currentHours >= day && currentHours < night) {
         setTheme(Options.get().lightTheme);
     } else if (currentHours >= night) {

@@ -42,6 +42,12 @@
         "chameleon.time.night": {
           "type": "number",
           "default": 20
+        },
+        "chameleon.latitude": {
+          "type": "number"
+        },
+        "chameleon.longitude": {
+          "type": "number"
         }
       }
     }
