@@ -12,11 +12,12 @@ const setTheme = (theme) => {
 const checkCurrentTimeAgainstSun = () => {
     var day = Options.get().time.day;
     var night = Options.get().time.night;
-    var currentTime = new Date().getHours();
 
-    if (currentTime > day && currentTime < night) {
+    var currentHours = new Date().getHours();
+
+    if (currentHours >= day && currentHours < night) {
         setTheme(Options.get().lightTheme);
-    } else if (currentTime > night) {
+    } else if (currentHours >= night) {
         setTheme(Options.get().darkTheme);
     }
 };
