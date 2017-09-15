@@ -32,15 +32,14 @@
           "description": "Theme to be used during night"
         },
         "chameleon.time": {
-          "type": "string",
-          "default": "auto"
+          "type": "string"
         },
-        "chameleon.time.day": {
-          "type": "number",
+        "chameleon.day": {
+          "type": ["number", "string"],
           "default": 8
         },
-        "chameleon.time.night": {
-          "type": "number",
+        "chameleon.night": {
+          "type": ["number", "string"],
           "default": 20
         },
         "chameleon.latitude": {

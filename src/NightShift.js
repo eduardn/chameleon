@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-// const SunCalc = require('suncalc');
 const Options = require('./Options');
+const Utils = require('./utils');
 
 const setTheme = (theme) => {
     var configuration = vscode.workspace.getConfiguration('workbench');
@@ -30,6 +30,15 @@ const checkOptions = () => {
         vscode.window.showWarningMessage(
             'Chameleon: No themes configured for day/night'
         );
+    }
+
+    if (!Options.get().time.value) {
+        if (Utils._isString(Options.get().time.day) ||
+            Utils._isString(Options.get().time.night)) {
+                vscode.window.showErrorMessage(
+                    "Chameleon: When time type is not set, day and night must be numbers. Will default to 8 for day and 20 for night"
+                );
+        }
     }
 };
 
