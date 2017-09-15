@@ -1,13 +1,6 @@
 const vscode = require('vscode');
-const SunCalc = require('suncalc');
-
-const getLightTheme = () => {
-    return 'JSFiddle-like-syntax-vscode';
-}
-
-const getDarkTheme = () => {
-    return 'Ayu Dark';
-}
+// const SunCalc = require('suncalc');
+const Options = require('./Options');
 
 const setTheme = (theme) => {
     var configuration = vscode.workspace.getConfiguration('workbench');
@@ -17,24 +10,42 @@ const setTheme = (theme) => {
 }
 
 const checkCurrentTimeAgainstSun = () => {
-    // get long/lat from storage
-    var times = SunCalc.getTimes(new Date(), 44.426767, 26.102538);
+    var day = Options.get().time.day;
+    var night = Options.get().time.night;
+    var currentTime = new Date().getHours();
 
-    var sunset = times.sunset;
-    var sunrise = times.sunrise;
-
-    var currentTime = new Date();
-
-    if (currentTime > sunrise && currentTime < sunset) {
-        setTheme(getLightTheme());
-    } else if (currentTime > sunset) {
-        setTheme(getDarkTheme());
+    if (currentTime > day && currentTime < night) {
+        setTheme(Options.get().lightTheme);
+    } else if (currentTime > night) {
+        setTheme(Options.get().darkTheme);
     }
 };
 
-module.exports = {
-    start() {
-        // TODO: Check configuration
-        setInterval(checkCurrentTimeAgainstSun, 1000);
+const checkOptions = () => {
+    if (!Options.get().darkTheme || !Options.get().lightTheme) {
+        vscode.window.showWarningMessage(
+            'Chameleon: No themes configured for day/night'
+        );
     }
+};
+
+const setDarkTheme = () => {
+    setTheme(Options.get().darkTheme);
+};
+
+const setLightTheme = () => {
+    setTheme(Options.get().lightTheme);
+}
+
+const start = () => {
+    checkOptions();
+    const intervalID = setInterval(checkCurrentTimeAgainstSun, 1000);
+
+    return intervalID;
+};
+
+module.exports = {
+    start,
+    setDarkTheme,
+    setLightTheme
 };
