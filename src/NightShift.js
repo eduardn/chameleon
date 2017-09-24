@@ -6,14 +6,30 @@ const NIGHT = 'night';
 const HOUR_IN_MILLISECONDS = 3600000;
 const MINUTE_IN_MILLISECONDS = 60000;
 
-const setTheme = (theme) => {
+module.exports = {
+    start,
+    setDarkTheme,
+    setLightTheme
+};
+
+/**
+ * Set a theme for the editor.
+ * 
+ * @param {string} theme Sets the provided theme to the vscode configuration.
+ */
+function setTheme(theme) {
     var configuration = vscode.workspace.getConfiguration('workbench');
     theme = theme || configuration.get('colorTheme');
 
     configuration.update('colorTheme', theme, true);
 };
 
-const getTimeOfDay = () => {
+/**
+ * Gets the time of day based on the day/night configuration options.
+ *
+ * @return {string} DAY/NIGHT constants defined at the beginning of the file.
+ */
+function getTimeOfDay() {
     var day = Options.get().time.day;
     var night = Options.get().time.night;
 
@@ -26,7 +42,10 @@ const getTimeOfDay = () => {
     }
 };
 
-const changeTheme = () => {
+/**
+ * Changes the theme based on the time of day.
+ */
+function changeTheme() {
     var timeOfDay = getTimeOfDay();
 
     if (timeOfDay === DAY) {
@@ -36,7 +55,11 @@ const changeTheme = () => {
     }
 };
 
-const checkOptions = () => {
+/**
+ * Checks the required options and shows a warning message if the
+ * required values are not set.
+ */
+function checkOptions() {
     if (!Options.get().darkTheme || !Options.get().lightTheme) {
         vscode.window.showWarningMessage(
             'Chameleon: No themes configured for day/night'
@@ -44,15 +67,24 @@ const checkOptions = () => {
     }
 };
 
-const setDarkTheme = () => {
+/**
+ * Sets the dark theme based on the configuration
+ */
+function setDarkTheme() {
     setTheme(Options.get().darkTheme);
 };
 
-const setLightTheme = () => {
+/**
+ * Sets the light theme based on the configuration
+ */
+function setLightTheme() {
     setTheme(Options.get().lightTheme);
 };
 
-const getWaitTime = () => {
+/**
+ * Gets the wait time in milliseconds between night/day.
+ */
+function getWaitTime() {
     var currentHour = new Date().getHours();
     var currentMinutes = new Date().getMinutes();
     var timeOfDay = getTimeOfDay();
@@ -67,15 +99,12 @@ const getWaitTime = () => {
     return difference * HOUR_IN_MILLISECONDS - currentMinutes * MINUTE_IN_MILLISECONDS;
 };
 
-const start = () => {
+/**
+ * Starts the extension
+ */
+function start() {
     checkOptions();
     changeTheme();
 
     setTimeout(start, getWaitTime());
-};
-
-module.exports = {
-    start,
-    setDarkTheme,
-    setLightTheme
 };

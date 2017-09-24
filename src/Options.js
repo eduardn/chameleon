@@ -20,7 +20,16 @@ const AVAILABLE_DAY_NIGHT_OPTIONS = [
     'dawn'
 ];
 
-const getAutoHours = (latitude, longitude, day, night) => {
+/**
+ * Gets the day/night hours based on day/night
+ * parameters and lat/long calculations.
+ * 
+ * @param {number} latitude 
+ * @param {number} longitude 
+ * @param {string} day A string representing the options available in suncalc.
+ * @param {string} night A string representing the options available in suncalc.
+ */
+function getAutoHours(latitude, longitude, day, night) {
     var times = suncalc.getTimes(new Date(), latitude, longitude);
     day = day || 'sunriseEnd';
     night = night || 'sunset';
