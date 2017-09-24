@@ -1,65 +1,53 @@
-# sunset-sunrise README
+# Chameleon
 
-This is the README for your extension "sunset-sunrise". After writing up a brief description, we recommend including the following sections.
+Chameleon is an extension that changes the theme to a light or a dark one
+based on day/night hours provided in the settings or by calculating sunset/sunrise
+based on latitude and longitude provided in the settings.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Change light/dark themes based on provided hours
+- Auto calculate the hours based on latitude/longitutde
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+None
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+* `chameleon.lightTheme`: Light theme to be used during the day
+* `chameleon.darkTheme`: Dark theme to be used during the night
+* `chameleon.day`: A number representing the start of the day (24h format)
+* `chameleon.night`: A number representing the start of the night (24h format)
+* `chameleon.time`: Set this to 'auto' to automatically calculate the day/night
+                    hours baesd on the provided latitude and longitude
+* `chameleon.latitude`: Latitude of your position
+* `chameleon.longitude`: Longitude of your position
 
-For example:
+#### Notes
+When `chameleon.time` is set to auto the `chameleon.day` and `chameleon.night`
+have a number of options that can be set to get different hours,
+see below the available options and their meaning.
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+| Property        | Description                                                              |
+| --------------- | ------------------------------------------------------------------------ |
+| `sunrise`       | sunrise (top edge of the sun appears on the horizon)                     |
+| `sunriseEnd`    | sunrise ends (bottom edge of the sun touches the horizon)                |
+| `goldenHourEnd` | morning golden hour (soft light, best time for photography) ends         |
+| `solarNoon`     | solar noon (sun is in the highest position)                              |
+| `goldenHour`    | evening golden hour starts                                               |
+| `sunsetStart`   | sunset starts (bottom edge of the sun touches the horizon)               |
+| `sunset`        | sunset (sun disappears below the horizon, evening civil twilight starts) |
+| `dusk`          | dusk (evening nautical twilight starts)                                  |
+| `nauticalDusk`  | nautical dusk (evening astronomical twilight starts)                     |
+| `night`         | night starts (dark enough for astronomical observations)                 |
+| `nadir`         | nadir (darkest moment of the night, sun is in the lowest position)       |
+| `nightEnd`      | night ends (morning astronomical twilight starts)                        |
+| `nauticalDawn`  | nautical dawn (morning nautical twilight starts)                         |
+| `dawn`          | dawn (morning nautical twilight ends, morning civil twilight starts)     |
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release!
