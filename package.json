@@ -25,28 +25,33 @@
       "properties": {
         "chameleon.lightTheme": {
           "type": "string",
-          "description": "Theme to be used during daytime"
+          "description": " Light theme to be used during the day"
         },
         "chameleon.darkTheme": {
           "type": "string",
-          "description": "Theme to be used during night"
+          "description": "Dark theme to be used during the night"
         },
         "chameleon.time": {
-          "type": "string"
+          "type": "string",
+          "description": "Set this to 'auto' to automatically calculate the day/night hours baesd on the provided latitude and longitude"
         },
         "chameleon.day": {
           "type": ["number", "string"],
-          "default": 8
+          "default": 8,
+          "description": "A number representing the start of the day (24h format)"
         },
         "chameleon.night": {
           "type": ["number", "string"],
-          "default": 20
+          "default": 20,
+          "description": "A number representing the start of the night (24h format)"
         },
         "chameleon.latitude": {
-          "type": "number"
+          "type": "number",
+          "description": "Latitude of your position"
         },
         "chameleon.longitude": {
-          "type": "number"
+          "type": "number",
+          "description": "Longitude of your position"
         }
       }
     }
