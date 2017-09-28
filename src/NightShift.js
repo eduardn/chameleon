@@ -14,7 +14,7 @@ module.exports = {
 
 /**
  * Set a theme for the editor.
- * 
+ *
  * @param {string} theme Sets the provided theme to the vscode configuration.
  */
 function setTheme(theme) {
@@ -104,6 +104,8 @@ function getWaitTime() {
  */
 function start() {
     checkOptions();
+    Options.parseOptions();
+
     changeTheme();
 
     setTimeout(start, getWaitTime());

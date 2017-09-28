@@ -31,18 +31,14 @@
           "type": "string",
           "description": "Dark theme to be used during the night"
         },
-        "chameleon.time": {
-          "type": "string",
-          "description": "Set this to 'auto' to automatically calculate the day/night hours baesd on the provided latitude and longitude"
-        },
         "chameleon.day": {
           "type": ["number", "string"],
-          "default": 8,
+          "default": -1,
           "description": "A number representing the start of the day (24h format)"
         },
         "chameleon.night": {
           "type": ["number", "string"],
-          "default": 20,
+          "default": -1,
           "description": "A number representing the start of the night (24h format)"
         },
         "chameleon.latitude": {

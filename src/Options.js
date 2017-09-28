@@ -20,71 +20,79 @@ const AVAILABLE_DAY_NIGHT_OPTIONS = [
     'dawn'
 ];
 
+let PARSED_OPTIONS = {};
+
+module.exports = { get, parseOptions };
+
 /**
- * Gets the day/night hours based on day/night
- * parameters and lat/long calculations.
- * 
- * @param {number} latitude 
- * @param {number} longitude 
- * @param {string} day A string representing the options available in suncalc.
- * @param {string} night A string representing the options available in suncalc.
+ * Parses options from vscode preference file
+ * and sets some default based on the set values.
  */
-function getAutoHours(latitude, longitude, day, night) {
-    var times = suncalc.getTimes(new Date(), latitude, longitude);
-    day = day || 'sunriseEnd';
-    night = night || 'sunset';
+function parseOptions() {
+    const options = vscode.workspace.getConfiguration(CONFIG_KEY);
 
-    return {
-        day: times[day].getHours(),
-        night: times[night].getHours()
-    };
-};
+    let darkTheme = options.get('darkTheme', '');
+    let lightTheme = options.get('lightTheme', '');
+    let latitude = options.get('latitude', 0);
+    let longitude = options.get('longitude', 0);
+    let day = options.get('day');
+    let night = options.get('night');
+    let time = {};
 
-module.exports = {
-    get() {
-        const options = vscode.workspace.getConfiguration(CONFIG_KEY);
-
-        const darkTheme = options.get('darkTheme', '');
-        const lightTheme = options.get('lightTheme', '');
-        const latitude = options.get('latitude', 0);
-        const longitude = options.get('longitude', 0);
-
-        var time = options.get('time', '');
-        var day = options.get('day');
-        var night = options.get('night');
-
-        if (time === 'auto') {
-            day = AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(day) > -1 ? day : null;
-            night = AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(night) > -1 ? night : null;
-
-            time = Object.assign(
-                { value: time },
-                getAutoHours(latitude, longitude, day, night)
-            );
-        } else {
-            if (Utils._isString(day) || Utils._isString(night)) {
-                time = {
-                    day: 8,
-                    night: 20,
-                    value: time
-                };
-            } else {
-                time = {
-                    day,
-                    night,
-                    value: time
-                };
-            }
+    if (latitude !== 0 && longitude !== 0) {
+        if (!Utils._isString(day) && day === -1) {
+            day = 'sunriseEnd';
         }
 
-        return {
-            darkTheme,
-            lightTheme,
-            time,
-            latitude,
-            longitude
-        };
-    },
+        if (!Utils._isString(night) && night === -1) {
+            night = 'sunset';
+        }
 
-    set() {}
-};
+        time = getTimeObject(day, night, latitude, longitude);
+    } else {
+        time = {
+            day: day > -1 ? day : 8,
+            night: night > -1 ? night : 20
+        };
+    }
+
+    PARSED_OPTIONS = {
+        darkTheme,
+        lightTheme,
+        time,
+        latitude,
+        longitude
+    };
+}
+
+/**
+ * Gets the parsed options
+ */
+function get() {
+    return PARSED_OPTIONS;
+}
+
+/**
+ * Gets a time object based on the latitude/longitude or day/night hours
+ *
+ * @param {string|number} day The hour at which the day starts
+ * @param {string|number} night The hour at which the night starts
+ * @param {number} latitude Latitude of the current position
+ * @param {number} longitude Longitude of the current position
+ */
+function getTimeObject(day, night, latitude, longitude) {
+    var calculatedTimes = suncalc.getTimes(new Date(), latitude, longitude);
+    let time = { day, night };
+
+    if (Utils._isString(day)) {
+        day = AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(day) ? day : 'sunriseEnd';
+        time.day = calculatedTimes[day].getHours();
+    }
+
+    if (Utils._isString(night)) {
+        night = AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(night) ? night : 'sunset';
+        time.night = calculatedTimes[night].getHours();
+    }
+
+    return time;
+}
