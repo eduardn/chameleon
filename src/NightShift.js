@@ -103,8 +103,8 @@ function getWaitTime() {
  * Starts the extension
  */
 function start() {
-    checkOptions();
     Options.parseOptions();
+    checkOptions();
 
     changeTheme();
 
