@@ -44,6 +44,47 @@ see below the available options and their meaning.
 | `nauticalDawn`  | nautical dawn (morning nautical twilight starts)                         |
 | `dawn`          | dawn (morning nautical twilight ends, morning civil twilight starts)     |
 
+## Example Configurations
+#### Manual hours
+
+```json
+    {
+        ....
+        "chameleon.darkTheme": "...",
+        "chameleon.lightTheme": "...",
+        "chameleon.day": 8,
+        "chameleon.night": 20
+        ....
+    }
+```
+
+#### Calculated hours
+
+```json
+    {
+        ....
+        "chameleon.darkTheme": "...",
+        "chameleon.lightTheme": "...",
+        "chameleon.latitude": 44.426767,
+        "chameleon.longitude": 26.102538
+        ....
+    }
+```
+
+#### Calculated hours with overriden night hour
+
+```json
+    {
+        ....
+        "chameleon.darkTheme": "...",
+        "chameleon.lightTheme": "...",
+        "chameleon.latitude": 44.426767,
+        "chameleon.longitude": 26.102538,
+        "chameleon.night": 20
+        ....
+    }
+```
+
 ## Release Notes
 
 ### 1.1.0
