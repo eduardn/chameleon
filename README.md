@@ -19,13 +19,11 @@ None
 * `chameleon.darkTheme`: Dark theme to be used during the night
 * `chameleon.day`: A number representing the start of the day (24h format)
 * `chameleon.night`: A number representing the start of the night (24h format)
-* `chameleon.time`: Set this to 'auto' to automatically calculate the day/night
-                    hours baesd on the provided latitude and longitude
 * `chameleon.latitude`: Latitude of your position
 * `chameleon.longitude`: Longitude of your position
 
 #### Notes
-When `chameleon.time` is set to auto the `chameleon.day` and `chameleon.night`
+When latitude and longitude are set `chameleon.day` and `chameleon.night`
 have a number of options that can be set to get different hours,
 see below the available options and their meaning.
 
@@ -47,6 +45,15 @@ see below the available options and their meaning.
 | `dawn`          | dawn (morning nautical twilight ends, morning civil twilight starts)     |
 
 ## Release Notes
+
+### 1.1.0
+
+- Removed ```chameleon.time``` option
+- The time is automatically calulated whenever you have set the
+    ```chameleon.latitude``` and ```chameleon.longitude``` options.
+- You can now override the automatically calculated hours by setting
+    ```chameleon.day``` or ```chameleon.night``` to your preferred hours
+    (e.g. have day hour be at sunrise and night hour be at 17 or any other hour)
 
 ### 1.0.0
 
