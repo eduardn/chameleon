@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const Options = require('./Options');
+const Notifications = require('./Notifications');
 
 const DAY = 'day';
 const NIGHT = 'night';
@@ -18,11 +19,17 @@ module.exports = {
  * @param {string} theme Sets the provided theme to the vscode configuration.
  */
 function setTheme(theme) {
-    var configuration = vscode.workspace.getConfiguration('workbench');
-    theme = theme || configuration.get('colorTheme');
+    let configuration = vscode.workspace.getConfiguration('workbench');
+    let previousTheme = configuration.get('colorTheme');
+
+    theme = theme || previousTheme;
 
     configuration.update('colorTheme', theme, true);
-};
+    Notifications.notifyUndoAction(
+        `Theme changed to '${theme}'`,
+        () => configuration.update('colorTheme', previousTheme, true)
+    );
+}
 
 /**
  * Gets the time of day based on the day/night configuration options.
@@ -40,7 +47,7 @@ function getTimeOfDay() {
     } else if (currentHours >= night) {
         return NIGHT;
     }
-};
+}
 
 /**
  * Changes the theme based on the time of day.
@@ -53,33 +60,21 @@ function changeTheme() {
     } else {
         setTheme(Options.get().darkTheme);
     }
-};
-
-/**
- * Checks the required options and shows a warning message if the
- * required values are not set.
- */
-function checkOptions() {
-    if (!Options.get().darkTheme || !Options.get().lightTheme) {
-        vscode.window.showWarningMessage(
-            'Chameleon: No themes configured for day/night'
-        );
-    }
-};
+}
 
 /**
  * Sets the dark theme based on the configuration
  */
 function setDarkTheme() {
     setTheme(Options.get().darkTheme);
-};
+}
 
 /**
  * Sets the light theme based on the configuration
  */
 function setLightTheme() {
     setTheme(Options.get().lightTheme);
-};
+}
 
 /**
  * Gets the wait time in milliseconds between night/day.
@@ -97,16 +92,23 @@ function getWaitTime() {
     }
 
     return difference * HOUR_IN_MILLISECONDS - currentMinutes * MINUTE_IN_MILLISECONDS;
-};
+}
 
 /**
  * Starts the extension
  */
 function start() {
     Options.parseOptions();
-    checkOptions();
+
+    if (!Options.get().lightTheme || !Options.get().darkTheme) {
+        // TODO: Change to warning
+        Notifications.notify(
+            Notifications.NotificationTypes.Info,
+            'Light theme or Dark theme not set. Chameleon will not start!'
+        );
+        return;
+    }
 
     changeTheme();
-
     setTimeout(start, getWaitTime());
-};
+}

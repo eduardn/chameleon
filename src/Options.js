@@ -1,8 +1,17 @@
 const vscode = require('vscode');
 const suncalc = require('suncalc');
 const Utils = require('./utils');
+const Notifications = require('./Notifications');
 
 const CONFIG_KEY = 'chameleon';
+const CONFIG_ITEMS = {
+    DarkTheme: 'darkTheme',
+    LightTheme: 'lightTheme',
+    Latitude: 'latitude',
+    Longitude: 'longitude',
+    Day: 'day',
+    Night: 'night'
+};
 const AVAILABLE_DAY_NIGHT_OPTIONS = [
     'sunrise',
     'sunriseEnd',
@@ -24,6 +33,34 @@ let PARSED_OPTIONS = {};
 
 module.exports = { get, parseOptions };
 
+function checkOptions(options) {
+    if (!options.get(CONFIG_ITEMS.DarkTheme)) {
+        Notifications.notifyOptionMissing('chameleon.darkTheme');
+    }
+
+    if (!options.get(CONFIG_ITEMS.LightTheme)) {
+        Notifications.notifyOptionMissing('chameleon.lightTheme');
+    }
+
+    let day = options.get(CONFIG_ITEMS.Day);
+    if (Utils._isString(day) &&
+        AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(day) === -1) {
+            Notifications.notify(
+                Notifications.NotificationTypes.Info,
+                `chameleon.${CONFIG_ITEMS.Day} value "${day}" is not recognized`
+            );
+    }
+
+    let night = options.get(CONFIG_ITEMS.Day);
+    if (Utils._isString(night) &&
+        AVAILABLE_DAY_NIGHT_OPTIONS.indexOf(night) === -1) {
+            Notifications.notify(
+                Notifications.NotificationTypes.Info,
+                `chameleon.${CONFIG_ITEMS.Night} value "${night}" is not recognized`
+            );
+    }
+}
+
 /**
  * Parses options from vscode preference file
  * and sets some default based on the set values.
@@ -31,13 +68,17 @@ module.exports = { get, parseOptions };
 function parseOptions() {
     const options = vscode.workspace.getConfiguration(CONFIG_KEY);
 
-    let darkTheme = options.get('darkTheme', '');
-    let lightTheme = options.get('lightTheme', '');
-    let latitude = options.get('latitude', 0);
-    let longitude = options.get('longitude', 0);
-    let day = options.get('day');
-    let night = options.get('night');
+    let darkTheme = options.get(CONFIG_ITEMS.DarkTheme, '');
+    let lightTheme = options.get(CONFIG_ITEMS.LightTheme, '');
+    let latitude = options.get(CONFIG_ITEMS.Latitude, 0);
+    let longitude = options.get(CONFIG_ITEMS.Longitude, 0);
+    let day = options.get(CONFIG_ITEMS.Day);
+    let night = options.get(CONFIG_ITEMS.Night);
     let time = {};
+
+    // Check options and show some info or errors to let the user know
+    // the configuration is no proper
+    checkOptions(options);
 
     if (latitude !== 0 && longitude !== 0) {
         if (!Utils._isString(day) && day === -1) {
